@@ -1,6 +1,6 @@
-﻿{
-  "api_base_url": "https://api.ypf.customers.sigma-ventures.cloud/client/v1",
-  "api_base_url_TEST_si_votre_cle_est_une_cle_sandbox": "https://bqsyp740n4.execute-api.ap-southeast-1.amazonaws.com/client/v1",
+{
+  "api_base_url": "https://bqsyp740n4.execute-api.ap-southeast-1.amazonaws.com/client/v1",
+  "api_base_url_ancienne": "https://api.ypf.customers.sigma-ventures.cloud/client/v1",
   "dry_run": true,
   "start_at": "2026-11-12T00:00:00Z",
   "lookback_minutes": 2880,
