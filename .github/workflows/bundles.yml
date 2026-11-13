@@ -1,0 +1,44 @@
+name: Bundles 4 comptes
+
+on:
+  # Lancement manuel depuis l'onglet Actions (bouton "Run workflow")
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "simulation (ne cree rien) ou reel (cree les comptes)"
+        type: choice
+        options: [simulation, reel]
+        default: simulation
+  # Lancement automatique : a activer une fois la simulation validee.
+  # Attention : sur un depot prive, chaque passage compte au moins 1 minute
+  # (2000 min/mois gratuites) -> toutes les 30 min = ~1440 min/mois.
+  # schedule:
+  #   - cron: "*/30 * * * *"
+
+# Jamais deux passages en meme temps (evite les doublons de comptes)
+concurrency:
+  group: bundles
+  cancel-in-progress: false
+
+jobs:
+  bundles:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Completer les bundles
+        env:
+          YPF_API_KEY: ${{ secrets.YPF_API_KEY }}
+          YPF_API_BASE_URL: ${{ vars.YPF_API_BASE_URL }}
+          MODE: ${{ inputs.mode || 'reel' }}
+        run: |
+          if [ "$MODE" = "reel" ]; then
+            python ypf_bundles.py --live
+          else
+            python ypf_bundles.py --dry-run
+          fi
